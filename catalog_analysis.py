@@ -236,6 +236,15 @@ def iter_high_rated(movies: list[dict], min_rating: float = 8.0):
             yield movie
 
 
+def demonstrate_generators(movies: list[dict]) -> None:
+    for movie in iter_high_rated(movies):
+        print(format_report_line(movie))
+    total_duration = sum(
+        movie["duration_min"] for movie in movies if movie["rating"] > 7
+    )
+    print(total_duration)
+
+
 def build_report(movies: list[dict]) -> None:
     print("ОТЧЕТ ПО КАТАЛОГУ")
     if movies:
@@ -262,9 +271,5 @@ def build_report(movies: list[dict]) -> None:
     print(f"\nВсе жанры каталога: {genres}")
 
 
-def main():
-    build_report(movies)
-
-
 if __name__ == "__main__":
-    main()
+    build_report(movies)
