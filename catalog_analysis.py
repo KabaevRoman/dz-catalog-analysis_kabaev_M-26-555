@@ -85,7 +85,7 @@ movies = [
 
 
 def average_rating(movies: list[dict]) -> float:
-    return round(sum(movie["rating"] for movie in movies), 1)
+    return round(sum(movie["rating"] for movie in movies) / len(movies), 1)
 
 
 def catalog_age_stats(
@@ -186,6 +186,33 @@ def titles_sorted_by_rating(movies: list[dict]) -> list[str]:
 def top_n_by_rating(movies: list[dict], n: int = 3) -> list[tuple[str, float]]:
     sorted_movies = sorted(movies, key=lambda movie: movie["rating"], reverse=True)
     return [(movie["title"], movie["rating"]) for movie in sorted_movies[:n]]
+
+
+def count_by_genre(movies: list[dict]) -> dict[str, int]:
+    genre_counts = {}
+    for movie in movies:
+        for genre in movie["genres"]:
+            genre_counts[genre] = genre_counts.get(genre, 0) + 1
+    return genre_counts
+
+
+def actor_filmography(movies: list[dict]) -> dict[str, list[str]]:
+    filmography = {}
+    for movie in movies:
+        for actor in movie["actors"]:
+            titles = filmography.get(actor, [])
+            titles.append(movie["title"])
+            filmography[actor] = titles
+    return filmography
+
+
+def ratings_above_average(movies: list[dict]) -> dict[str, float]:
+    if not movies:
+        return {}
+    average = average_rating(movies)
+    return {
+        movie["title"]: movie["rating"] for movie in movies if movie["rating"] > average
+    }
 
 
 def main():
