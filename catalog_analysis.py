@@ -215,6 +215,21 @@ def ratings_above_average(movies: list[dict]) -> dict[str, float]:
     }
 
 
+def all_genres(movies: list[dict]) -> set[str]:
+    genres = set()
+    for movie in movies:
+        genres.update(movie["genres"])
+    return genres
+
+
+def common_actors(movie1: dict, movie2: dict) -> set[str]:
+    return set(movie1["actors"]) & set(movie2["actors"])
+
+
+def genres_only_in_one(movies_a: list[dict], movies_b: list[dict]) -> set[str]:
+    return all_genres(movies_a) - all_genres(movies_b)
+
+
 def main():
     print_non_comedy_movies(movies)
     print_first_masterpiece(movies)
