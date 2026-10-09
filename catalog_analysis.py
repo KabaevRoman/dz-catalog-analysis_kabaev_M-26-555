@@ -230,10 +230,22 @@ def genres_only_in_one(movies_a: list[dict], movies_b: list[dict]) -> set[str]:
     return all_genres(movies_a) - all_genres(movies_b)
 
 
+def iter_high_rated(movies: list[dict], min_rating: float = 8.0):
+    for movie in movies:
+        if movie["rating"] >= min_rating:
+            yield movie
+
+
 def main():
     print_non_comedy_movies(movies)
     print_first_masterpiece(movies)
     print(count_long_movies(movies))
+    for movie in iter_high_rated(movies):
+        print(format_report_line(movie))
+    total_duration = sum(
+        movie["duration_min"] for movie in movies if movie["rating"] > 7
+    )
+    print(total_duration)
 
 
 if __name__ == "__main__":
