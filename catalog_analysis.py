@@ -111,6 +111,25 @@ def duration_in_hours(minutes: int) -> str:
     return f"{hours}ч {remaining_minutes}м"
 
 
+def rating_tier(rating: float) -> str:
+    if rating >= 9:
+        return "шедевр"
+    elif rating >= 7:
+        return "хорошо"
+    else:
+        return "средне" if rating >= 5 else "слабо"
+
+
+def decade_label(year: int) -> str:
+    match year:
+        case _ if year > 2020:
+            return "новые"
+        case _ if 2015 <= year <= 2020:
+            return "недавние"
+        case _:
+            return "старые"
+
+
 def main():
     print("Hello from dz-catalog-analysis-kabaev-m-26-555!")
 
