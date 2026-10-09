@@ -92,11 +92,11 @@ def catalog_age_stats(
     movies: list[dict],
     current_year: int = 2026,
 ) -> tuple[int, int, int]:
-    min_age = 0
-    max_age = 0
+    min_age = current_year - movies[0]["year"]
+    max_age = min_age
     total_age = 0
 
-    for movie in movies[1:]:
+    for movie in movies:
         age = current_year - movie["year"]
         total_age += age
         min_age = min(min_age, age)
@@ -236,16 +236,34 @@ def iter_high_rated(movies: list[dict], min_rating: float = 8.0):
             yield movie
 
 
+def build_report(movies: list[dict]) -> None:
+    print("ОТЧЕТ ПО КАТАЛОГУ")
+    if movies:
+        print(f"Средний рейтинг: {average_rating(movies):.1f}")
+        average_age = catalog_age_stats(movies)[2]
+        print(f"Средний возраст фильмов: {average_age} лет")
+    else:
+        print("Средний рейтинг: нет данных")
+        print("Средний возраст фильмов: нет данных")
+
+    print("\nТоп-3 фильма:")
+    top_movies = sorted(movies, key=lambda movie: movie["rating"], reverse=True)[:3]
+    for movie in top_movies:
+        print(f"  {format_report_line(movie)}")
+
+    print("\nФильмов по жанрам:")
+    genre_counts = count_by_genre(movies)
+    for genre, count in sorted(
+        genre_counts.items(), key=lambda item: (-item[1], item[0])
+    ):
+        print(f"  {genre} — {count}")
+
+    genres = ", ".join(sorted(all_genres(movies)))
+    print(f"\nВсе жанры каталога: {genres}")
+
+
 def main():
-    print_non_comedy_movies(movies)
-    print_first_masterpiece(movies)
-    print(count_long_movies(movies))
-    for movie in iter_high_rated(movies):
-        print(format_report_line(movie))
-    total_duration = sum(
-        movie["duration_min"] for movie in movies if movie["rating"] > 7
-    )
-    print(total_duration)
+    build_report(movies)
 
 
 if __name__ == "__main__":
